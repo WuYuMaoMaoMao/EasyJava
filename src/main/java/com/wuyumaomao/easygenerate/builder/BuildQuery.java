@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuildQuery {
     private static  final Logger logger= LoggerFactory.getLogger(BuildQuery.class);
@@ -45,31 +47,44 @@ public class BuildQuery {
             BuildComment.createClassComment(bw,tableInfo.getComment());
             bw.write("public class "+className+"{");
             bw.newLine();
+            List<FieldInfo> extendList=new ArrayList<>();
             for(FieldInfo fieldInfo:tableInfo.getFieldList()){
-                BuildComment.createFieldComment(bw,fieldInfo.getComment());
-
-                if(ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES,fieldInfo.getSqlType())){
-                    bw.write(" \t"+String.format(Contans.bean_date_format_expression, DateUtils.YYYY_MM_DD_HH_MM_SS));
-                    bw.newLine();
-                    bw.write(" \t"+String.format(Contans.bean_date_unformat_expression,DateUtils.YYYY_MM_DD_HH_MM_SS));
-                    bw.newLine();
-                }
-                if(ArrayUtils.contains(Contans.SQL_DATE_TYPES,fieldInfo.getSqlType())){
-                    bw.write(" \t"+String.format(Contans.bean_date_format_expression,DateUtils.YYYY_MM_DD));
-                    bw.newLine();
-                    bw.write(" \t"+String.format(Contans.bean_date_unformat_expression,DateUtils.YYYY_MM_DD));
-                    bw.newLine();
-                }
-
-                if(ArrayUtils.contains(Contans.ignore_bean_tojson_field.split(","),fieldInfo.getPropertyName())){
-                    bw.write(" \t"+String.format(Contans.ignore_bean_tojson_expression,DateUtils.YYYY_MM_DD));
-                    bw.newLine();
-                }
+                BuildComment.createFieldComment(bw,fieldInfo.getComment()+"查询对象");
                 bw.write("    "+"private "+fieldInfo.getJavaType()+" "+fieldInfo.getPropertyName()+";");
-                bw.newLine() ;
                 bw.newLine();
+                bw.newLine();
+                if(ArrayUtils.contains(Contans.SQL_STRING_TYPES,fieldInfo.getSqlType())){
+                    String propertyName=fieldInfo.getPropertyName()+Contans.Suffix_bean_query_fuzzy;
+                    bw.write("\tprivate "+fieldInfo.getJavaType()+" "+propertyName+";");
+                    bw.newLine();
+                    bw.newLine();
+                    FieldInfo fuzzyField=new FieldInfo();
+                    fuzzyField.setJavaType(fieldInfo.getJavaType());
+                    fuzzyField.setPropertyName(propertyName);
+                    extendList.add(fuzzyField);
+                }
+                if(ArrayUtils.contains(Contans.SQL_DATE_TYPES,fieldInfo.getSqlType())||ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES,fieldInfo.getSqlType())){
+                    bw.write("\tprivate String"+" "+fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_start+";");
+                    bw.newLine();
+                    bw.newLine();
+
+                    bw.write("\tprivate String"+" "+fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_end+";");
+                    bw.newLine();
+                    bw.newLine();
+                    FieldInfo timeStartField=new FieldInfo();
+                    timeStartField.setJavaType("String");
+                    timeStartField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_start);
+                    extendList.add(timeStartField);
+
+                    FieldInfo timeEndField=new FieldInfo();
+                    timeEndField.setJavaType("String");
+                    timeEndField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_end);
+                    extendList.add(timeEndField);
+                }
             }
-            for(FieldInfo fieldInfo:tableInfo.getFieldList()){
+            List<FieldInfo> fieldInfoList=tableInfo.getFieldList();
+            fieldInfoList.addAll(extendList);
+            for(FieldInfo fieldInfo:fieldInfoList){
                 String tempField= StringUtils.upperCaseFirstLetter(fieldInfo.getPropertyName());
                 bw.write("\t public void set"+tempField+"("+fieldInfo.getJavaType()+" "+fieldInfo.getPropertyName()+"){");
                 bw.newLine();

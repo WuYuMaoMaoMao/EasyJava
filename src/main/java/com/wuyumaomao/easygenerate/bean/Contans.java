@@ -27,6 +27,10 @@ public class Contans {
    public static String PATH_ENUM;
    public static String PACKAGE_QUERY;
    public static String PATH_QUERY;
+   public static String Suffix_bean_query_fuzzy;
+   public static String Suffix_bean_query_time_start;
+   public static String Suffix_bean_query_time_end;
+
     static {
         ignore_table_prefix= Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         suffix_bean_query=PropertiesUtils.getString("suffix.bean.query");
@@ -51,6 +55,10 @@ public class Contans {
 
        PACKAGE_QUERY=PACKAGE_BASE+"."+PropertiesUtils.getString("package.query"); ;
        PATH_QUERY=PATH_BASE+"/"+PropertiesUtils.getString("package.query").replace(".","/");
+
+       Suffix_bean_query_fuzzy=PropertiesUtils.getString("suffix.bean.query.fuzzy");
+       Suffix_bean_query_time_start=PropertiesUtils.getString("suffix.bean.query.time.start");
+       Suffix_bean_query_time_end=PropertiesUtils.getString("suffix.bean.query.time.end");
     }
     public  final static String[] SQL_DATE_TIME_TYPES=new String[]{"datetime","timestamp"};
     public  final static String[] SQL_DATE_TYPES=new String[]{"date"};
