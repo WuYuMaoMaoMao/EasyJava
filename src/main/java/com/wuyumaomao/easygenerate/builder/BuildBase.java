@@ -19,6 +19,11 @@ public class BuildBase {
         headerInfoList.clear();
         headerInfoList.add("package"+" "+Contans.package_Utils);
        build(headerInfoList,"DateUtil", Contans.PATH_UTILS);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_MAPPER);
+        build(headerInfoList,"BaseMapper", Contans.PATH_MAPPER);
+
     }
     public static void build(List<String> headerInfoList, String fileName, String outPutPath){
         File folder=new File(outPutPath);

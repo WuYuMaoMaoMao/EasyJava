@@ -32,8 +32,8 @@ public class BuildComment {
         bw.write("\t */");
         bw.newLine();
     }
-    public void createMethodComment(){
-
+    public static void createMethodComment(){
+        
     }
 
 }
