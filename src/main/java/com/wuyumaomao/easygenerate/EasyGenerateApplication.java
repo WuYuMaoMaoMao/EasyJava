@@ -17,6 +17,7 @@ public class EasyGenerateApplication {
              BuildPo.execute(tableInfo);
             BuildQuery.execute(tableInfo);
             BuildMapper.execute(tableInfo);
+            BuildMapperXML.execute(tableInfo);
         }
     }
 

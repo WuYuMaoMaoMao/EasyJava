@@ -2,7 +2,7 @@ package com.wuyumaomao.easygenerate.mappers;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-public interface BaseMapper<T,P>{
+public interface  BaseMapper<T,P>{
     /**
      * insert :(插入)
      */
