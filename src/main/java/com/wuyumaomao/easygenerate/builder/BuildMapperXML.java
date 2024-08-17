@@ -37,6 +37,37 @@ public class BuildMapperXML {
             bw.newLine();
             bw.write("<!--实体映射-->");
             bw.newLine();
+            String poClass=Contans.PACKAGE_PO+"."+tableInfo.getBeanName();
+            bw.write("<resultMap id=\"base_result_map\" type=\""+poClass+"\">");
+            bw.newLine();
+            tableInfo.getKeyIndexMap().entrySet();
+            Map<String,List<FieldInfo>> keyIndexMap=tableInfo.getKeyIndexMap();
+            FieldInfo isField=null;
+            for(Map.Entry<String,List<FieldInfo>> entry:keyIndexMap.entrySet()) {
+                if ("PRIMARY".equals(entry.getKey())) {
+                    List<FieldInfo> fieldInfoList = entry.getValue();
+                    if (fieldInfoList.size() == 1) {
+                        isField = fieldInfoList.get(0);
+                        break;
+                    }
+                }
+            }
+            for (FieldInfo fieldInfo:tableInfo.getFieldList()){
+                bw.write("\t\t<!--"+fieldInfo.getComment()+"-->");
+                bw.newLine();
+                String key="";
+                if (isField!=null&&fieldInfo.getPropertyName().equals(isField.getPropertyName())){
+                    key="id";
+                }else {
+//                    bw.write("<result column=\"id\" property=\"id\"/>");
+                    key="result";
+                }
+              bw.write("<"+key+" column=\""+fieldInfo.getFieldName()+"\" property=\""+fieldInfo.getPropertyName()+"\"/>");
+                bw.newLine();
+
+
+            }
+            bw.write("</resultMap>");
             bw.newLine();
             bw.write("</mapper>");
             bw.newLine();
