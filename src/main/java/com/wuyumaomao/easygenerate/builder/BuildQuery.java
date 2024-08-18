@@ -82,27 +82,11 @@ public class BuildQuery {
                     extendList.add(timeEndField);
                 }
             }
-            List<FieldInfo> fieldInfoList=tableInfo.getFieldList();
-            fieldInfoList.addAll(extendList);
-            for(FieldInfo fieldInfo:fieldInfoList){
-                String tempField= StringUtils.upperCaseFirstLetter(fieldInfo.getPropertyName());
-                bw.write("\t public void set"+tempField+"("+fieldInfo.getJavaType()+" "+fieldInfo.getPropertyName()+"){");
-                bw.newLine();
-                bw.write("\t   this."+fieldInfo.getPropertyName()+"="+fieldInfo.getPropertyName()+";");
-                bw.newLine();
-                bw.write("\t }");
-                bw.newLine();
-
-                bw.write("\t public"+" "+fieldInfo.getJavaType()+" "+"get"+tempField+"("+"){");
-                bw.newLine();
-                bw.write("\t  return this."+fieldInfo.getPropertyName()+";");
-                bw.newLine();
-                bw.write("\t }");
-                bw.newLine();
-            }
+            List<FieldInfo>  fieldInfoList=tableInfo.getFieldList();
             StringBuffer toString=new StringBuffer();
             Integer index=0;
-
+            buildGetSet(fieldInfoList,bw);
+            buildGetSet(extendList,bw);
             bw.write("}");
             bw.flush();
         }catch (Exception e){
@@ -117,5 +101,23 @@ public class BuildQuery {
             }
         }
 
+    }
+    public static void buildGetSet(List<FieldInfo> fieldInfoList, BufferedWriter bw) throws IOException {
+        for(FieldInfo fieldInfo:fieldInfoList){
+            String tempField= StringUtils.upperCaseFirstLetter(fieldInfo.getPropertyName());
+            bw.write("\t public void set"+tempField+"("+fieldInfo.getJavaType()+" "+fieldInfo.getPropertyName()+"){");
+            bw.newLine();
+            bw.write("\t   this."+fieldInfo.getPropertyName()+"="+fieldInfo.getPropertyName()+";");
+            bw.newLine();
+            bw.write("\t }");
+            bw.newLine();
+
+            bw.write("\t public"+" "+fieldInfo.getJavaType()+" "+"get"+tempField+"("+"){");
+            bw.newLine();
+            bw.write("\t  return this."+fieldInfo.getPropertyName()+";");
+            bw.newLine();
+            bw.write("\t }");
+            bw.newLine();
+        }
     }
 }

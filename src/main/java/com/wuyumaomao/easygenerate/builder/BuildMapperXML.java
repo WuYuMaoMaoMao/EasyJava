@@ -4,6 +4,7 @@ import com.wuyumaomao.easygenerate.bean.Contans;
 import com.wuyumaomao.easygenerate.bean.FieldInfo;
 import com.wuyumaomao.easygenerate.bean.TableInfo;
 import com.wuyumaomao.easygenerate.utils.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,11 @@ import java.util.Map;
 
 public class BuildMapperXML {
     private static  final Logger logger= LoggerFactory.getLogger(BuildMapperXML.class);
+    private static String base_column_list="base_column_list";
+    private static String base_query_condition="base_query_condition";
+    private static String base_condition="base_condition";
     public static void execute(TableInfo tableInfo){
+
        File folder=new File(Contans.PATH_MAPPERS_XML);
        if(!folder.exists()){
            folder.mkdirs();
@@ -35,8 +40,9 @@ public class BuildMapperXML {
             bw.newLine();
             bw.write("<mapper namespace=\""+Contans.PACKAGE_MAPPER+"."+ClassName+"\">");
             bw.newLine();
-            bw.write("<!--实体映射-->");
+            bw.write("\t<!--实体映射-->");
             bw.newLine();
+
             String poClass=Contans.PACKAGE_PO+"."+tableInfo.getBeanName();
             bw.write("<resultMap id=\"base_result_map\" type=\""+poClass+"\">");
             bw.newLine();
@@ -62,12 +68,45 @@ public class BuildMapperXML {
 //                    bw.write("<result column=\"id\" property=\"id\"/>");
                     key="result";
                 }
-              bw.write("<"+key+" column=\""+fieldInfo.getFieldName()+"\" property=\""+fieldInfo.getPropertyName()+"\"/>");
+              bw.write("\t<"+key+" column=\""+fieldInfo.getFieldName()+"\" property=\""+fieldInfo.getPropertyName()+"\"/>");
                 bw.newLine();
 
 
             }
-            bw.write("</resultMap>");
+            bw.write(" </resultMap>");
+            bw.newLine();
+            bw.write("\t<!--通用查询列-->");
+            bw.newLine();
+//            String base_column_list="base_column_list";
+            bw.write("\t <sql id=\""+base_column_list+"\">");
+            bw.newLine();
+            StringBuilder columnBuilder=new StringBuilder();
+            for (FieldInfo fieldInfo:tableInfo.getFieldList()){
+                columnBuilder.append(fieldInfo.getFieldName()).append(",");
+            }
+            String columnBuilderStr=columnBuilder.substring(0,columnBuilder.lastIndexOf(","));
+            bw.write("\t\t  "+columnBuilderStr);
+            bw.newLine();
+            bw.write("\t </sql>");
+            bw.newLine();
+            bw.write("\t<!--基础查询条件-->");
+            bw.newLine();
+//            String base_column_list="base_column_list";
+            bw.write("\t <sql id=\""+base_query_condition+"\">");
+            bw.newLine();
+            for (FieldInfo fieldInfo:tableInfo.getFieldList()){
+               String stringQuery="";
+                if(ArrayUtils.contains(Contans.SQL_STRING_TYPES,fieldInfo.getSqlType())){
+                  stringQuery=" and query."+fieldInfo.getPropertyName()+"!=''";
+               }
+               bw.write("\t  <if test=\"query."+fieldInfo.getPropertyName()+"!=null\">");
+               bw.newLine();
+               bw.write("\t    and id=#{query."+fieldInfo.getPropertyName()+"}");
+               bw.newLine();
+               bw.write("\t  </if>");
+               bw.newLine();
+            }
+            bw.write("\t</sql>");
             bw.newLine();
             bw.write("</mapper>");
             bw.newLine();
