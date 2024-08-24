@@ -15,5 +15,6 @@ public class TableInfo {
    private Map<String,List<FieldInfo>> keyIndexMap=new LinkedHashMap<>();
    private Boolean haveDate;
    private Boolean haveDateTime;
+   private List<FieldInfo> fieldExtendList;
    private Boolean haveBigDecimal;
 }

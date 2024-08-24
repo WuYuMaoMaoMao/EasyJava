@@ -16,7 +16,8 @@ public class BuildMapperXML {
     private static  final Logger logger= LoggerFactory.getLogger(BuildMapperXML.class);
     private static String base_column_list="base_column_list";
     private static String base_query_condition="base_query_condition";
-    private static String base_condition="base_condition";
+    private static String query_condition="query_condition";
+    private static String base_query_condition_extend="base_query_condition_extend";
     public static void execute(TableInfo tableInfo){
 
        File folder=new File(Contans.PATH_MAPPERS_XML);
@@ -106,6 +107,44 @@ public class BuildMapperXML {
                bw.write("\t  </if>");
                bw.newLine();
             }
+            bw.write("\t</sql>");
+            bw.newLine();
+            bw.write("\t<!--拓展查询条件-->");
+            bw.newLine();
+            bw.write("\t <sql id=\""+base_query_condition_extend+"\">");
+            bw.newLine();
+            for (FieldInfo fieldInfo:tableInfo.getFieldExtendList()){
+                String andWhere="";
+                if(ArrayUtils.contains(Contans.SQL_STRING_TYPES,fieldInfo.getSqlType())){
+                    andWhere=" and "+fieldInfo.getFieldName()+" like concat('%',#(query."+fieldInfo.getPropertyName()+"),'%')";
+                }else if(ArrayUtils.contains(Contans.SQL_DATE_TYPES,fieldInfo.getSqlType())||ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES,fieldInfo.getSqlType())){
+                    if(fieldInfo.getPropertyName().endsWith(Contans.Suffix_bean_query_time_start)){
+                        andWhere="<![CDATA[ and "+fieldInfo.getFieldName()+">= str_to_date(#("+fieldInfo.getPropertyName()+"),'%Y-%m-%d')]]>";
+                    }else if(fieldInfo.getPropertyName().endsWith(Contans.Suffix_bean_query_time_end)){
+                        andWhere="<![CDATA[ and "+fieldInfo.getFieldName()+" <date_sub(str_to_date(#(query."+fieldInfo.getPropertyName()+"),'%Y-%m-%d'),"+"interval -1 day) ]]>";
+                    }
+                }
+                bw.write("\t  <if test=\"query."+fieldInfo.getPropertyName()+"!=null and query."+fieldInfo.getPropertyName()+"!=''\">");
+                bw.newLine();
+                bw.write("\t    "+andWhere);
+                bw.newLine();
+                bw.write("\t  </if>");
+                bw.newLine();
+            }
+            bw.write("\t</sql>");
+            bw.newLine();
+            bw.write("\t<!--拓展查询条件-->");
+            bw.newLine();
+            bw.write("\t<sql id=\""+query_condition+"\">");
+            bw.newLine();
+            bw.write("\t <where>");
+            bw.newLine();
+            bw.write("\t  <include refid=\""+base_column_list+"\"/>");
+            bw.newLine();
+            bw.write("\t  <include refid=\""+base_query_condition_extend+"\">");
+            bw.newLine();
+            bw.write("\t </where>");
+            bw.newLine();
             bw.write("\t</sql>");
             bw.newLine();
             bw.write("</mapper>");

@@ -4,7 +4,7 @@ import java.util.Date;
 /**
  *  @Description:用户信息
  *  @author:wuyumaomao
- *  @Date:2024/08/14
+ *  @Date:2024/08/24
  */
 public class InfoQuery{
 	/**
@@ -246,4 +246,5 @@ public class InfoQuery{
 	 public String getLastOffTimeEnd(){
 	  return this.lastOffTimeEnd;
 	 }
+
 }

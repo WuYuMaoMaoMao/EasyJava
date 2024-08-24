@@ -110,48 +110,81 @@ public class BuildTables {
         PreparedStatement ps=null;
         ResultSet fieldResult=null;
         List<FieldInfo> fieldInfoList=new ArrayList<>();
+        List<FieldInfo> fieldExtendList=new ArrayList<>();
 
         try {
-            ps=conn.prepareStatement(String.format(SQL_SHOW_TABLE_FIELD,tableInfo.getTableName()));
-            fieldResult=ps.executeQuery();
-            while(fieldResult.next()){
-                String field=fieldResult.getString("Field");
-                String type=fieldResult.getString("Type");
-                String extra=fieldResult.getString("Extra");
-                String comment=fieldResult.getString("Comment");
+            ps = conn.prepareStatement(String.format(SQL_SHOW_TABLE_FIELD, tableInfo.getTableName()));
+            fieldResult = ps.executeQuery();
+
+            boolean haveDate=false;
+            boolean haveDateTime=false;
+            boolean haveBigDecimal=false;
+            while (fieldResult.next()) {
+                String field = fieldResult.getString("Field");
+                String type = fieldResult.getString("Type");
+                String extra = fieldResult.getString("Extra");
+                String comment = fieldResult.getString("Comment");
 //                logger.info("field:{},type:{},extra:{},cpmment:{}",field,type,extra,comment);
-                if(type.indexOf("(")>0){
-                    type=type.substring(0,type.indexOf("("));
+                if (type.indexOf("(") > 0) {
+                    type = type.substring(0, type.indexOf("("));
                 }
-                String propertyName=processField(field,false);
-                FieldInfo fieldInfo=new FieldInfo();
+                String propertyName = processField(field, false);
+                FieldInfo fieldInfo = new FieldInfo();
                 fieldInfo.setFieldName(field);
                 fieldInfo.setComment(comment);
                 fieldInfo.setSqlType(type);
-                fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra)?true:false);
+                fieldInfo.setIsAutoIncrement("auto_increment".equalsIgnoreCase(extra) ? true : false);
                 fieldInfo.setPropertyName(propertyName);
                 fieldInfo.setJavaType(parseJavaType(type));
+
                 fieldInfoList.add(fieldInfo);
 //                tableInfo.setFieldList(fieldInfoList);
 //                logger.info("field:{},type:{},extra:{},cpmment:{},propertyName:{},JavaType:{}",field,type,extra,comment,propertyName,parseJavaType(type));
-                if(ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES,type)){
-                    tableInfo.setHaveDateTime(true);
-                }else {
-                    tableInfo.setHaveDateTime(false);
+                if (ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES, type)) {
+                    haveDateTime = true;
+                } else {
+                    haveDateTime = false;
                 }
-                if(ArrayUtils.contains(Contans.SQL_DATE_TYPES,type)){
-                    tableInfo.setHaveDate(true);
-                }else {
-                    tableInfo.setHaveDate(false);
+                if (ArrayUtils.contains(Contans.SQL_DATE_TYPES, type)) {
+                    haveDate = true;
+                } else {
+                    haveDate = false;
                 }
-                if(ArrayUtils.contains(Contans.SQL_DECIMAL_TYPES,type)){
-                    tableInfo.setHaveBigDecimal(true);
-                }else {
-                    tableInfo.setHaveBigDecimal(false);
+                if (ArrayUtils.contains(Contans.SQL_DECIMAL_TYPES, type)) {
+                    haveBigDecimal = true;
+                } else {
+                    haveBigDecimal = false;
                 }
+                if (ArrayUtils.contains(Contans.SQL_STRING_TYPES, type)) {
 
+                    FieldInfo fuzzyField = new FieldInfo();
+                    fuzzyField.setJavaType(fieldInfo.getJavaType());
+                    fuzzyField.setPropertyName(propertyName+Contans.Suffix_bean_query_fuzzy);
+                    fuzzyField.setFieldName(fieldInfo.getFieldName());
+                    fuzzyField.setSqlType(type);
+                    fieldExtendList.add(fuzzyField);
+                }
+                if (ArrayUtils.contains(Contans.SQL_DATE_TYPES, type) || ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES, type)) {
+                    FieldInfo timeStartField = new FieldInfo();
+                    timeStartField.setJavaType("String");
+                    timeStartField.setPropertyName(propertyName + Contans.Suffix_bean_query_time_start);
+                    timeStartField.setFieldName(fieldInfo.getFieldName());
+                    timeStartField.setSqlType(type);
+                    fieldExtendList.add(timeStartField);
+
+                    FieldInfo timeEndField = new FieldInfo();
+                    timeEndField.setJavaType("String");
+                    timeEndField.setPropertyName(propertyName + Contans.Suffix_bean_query_time_end);
+                    timeEndField.setFieldName(fieldInfo.getFieldName());
+                    timeEndField.setSqlType(type);
+                    fieldExtendList.add(timeEndField);
+                }
             }
-           tableInfo.setFieldList(fieldInfoList);
+            tableInfo.setHaveDate(haveDate);
+            tableInfo.setHaveBigDecimal(haveBigDecimal);
+            tableInfo.setHaveDateTime(haveDateTime);
+            tableInfo.setFieldList(fieldInfoList);
+            tableInfo.setFieldExtendList(fieldExtendList);
         }catch (Exception e){
             logger.error("读取表失败",e);
         }finally {

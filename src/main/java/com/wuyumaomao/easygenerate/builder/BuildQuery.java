@@ -58,10 +58,10 @@ public class BuildQuery {
                     bw.write("\tprivate "+fieldInfo.getJavaType()+" "+propertyName+";");
                     bw.newLine();
                     bw.newLine();
-                    FieldInfo fuzzyField=new FieldInfo();
-                    fuzzyField.setJavaType(fieldInfo.getJavaType());
-                    fuzzyField.setPropertyName(propertyName);
-                    extendList.add(fuzzyField);
+//                    FieldInfo fuzzyField=new FieldInfo();
+//                    fuzzyField.setJavaType(fieldInfo.getJavaType());
+//                    fuzzyField.setPropertyName(propertyName);
+//                    extendList.add(fuzzyField);
                 }
                 if(ArrayUtils.contains(Contans.SQL_DATE_TYPES,fieldInfo.getSqlType())||ArrayUtils.contains(Contans.SQL_DATE_TIME_TYPES,fieldInfo.getSqlType())){
                     bw.write("\tprivate String"+" "+fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_start+";");
@@ -71,22 +71,23 @@ public class BuildQuery {
                     bw.write("\tprivate String"+" "+fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_end+";");
                     bw.newLine();
                     bw.newLine();
-                    FieldInfo timeStartField=new FieldInfo();
-                    timeStartField.setJavaType("String");
-                    timeStartField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_start);
-                    extendList.add(timeStartField);
-
-                    FieldInfo timeEndField=new FieldInfo();
-                    timeEndField.setJavaType("String");
-                    timeEndField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_end);
-                    extendList.add(timeEndField);
+//                    FieldInfo timeStartField=new FieldInfo();
+//                    timeStartField.setJavaType("String");
+//                    timeStartField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_start);
+//                    extendList.add(timeStartField);
+//
+//                    FieldInfo timeEndField=new FieldInfo();
+//                    timeEndField.setJavaType("String");
+//                    timeEndField.setPropertyName(fieldInfo.getPropertyName()+Contans.Suffix_bean_query_time_end);
+//                    extendList.add(timeEndField);
                 }
             }
-            List<FieldInfo>  fieldInfoList=tableInfo.getFieldList();
+//            List<FieldInfo>  fieldInfoList=tableInfo.getFieldList();
             StringBuffer toString=new StringBuffer();
             Integer index=0;
-            buildGetSet(fieldInfoList,bw);
-            buildGetSet(extendList,bw);
+            buildGetSet(tableInfo.getFieldList(),bw);
+            buildGetSet(tableInfo.getFieldExtendList(),bw);
+            bw.newLine();
             bw.write("}");
             bw.flush();
         }catch (Exception e){

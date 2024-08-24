@@ -3,7 +3,7 @@ package com.wuyumaomao.easygenerate.query;
 /**
  *  @Description:靓号表
  *  @author:wuyumaomao
- *  @Date:2024/08/14
+ *  @Date:2024/08/24
  */
 public class InfoBeautyQuery{
 	/**
@@ -66,4 +66,5 @@ public class InfoBeautyQuery{
 	 public String getUserIdFuzzy(){
 	  return this.userIdFuzzy;
 	 }
+
 }
