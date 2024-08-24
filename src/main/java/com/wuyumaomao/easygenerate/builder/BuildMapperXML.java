@@ -147,6 +147,29 @@ public class BuildMapperXML {
             bw.newLine();
             bw.write("\t</sql>");
             bw.newLine();
+            bw.write("\t<!--查询列表-->");
+            bw.newLine();
+            bw.write("\t<select id=\"selectList\" resultMap=\"base_result_map\">");
+            bw.newLine();
+            bw.write("\t\tSELECT <include refid=\""+base_column_list+"\"/> FROM "+tableInfo.getTableName()+"<include refid=\""+query_condition+"\"/>");
+            bw.newLine();
+            bw.write("\t\t<if test=\"query.orderBy!=null\">order by ${query.orderBy}</if>");
+            bw.newLine();
+            bw.write("\t\t<if test=\"query.simplePage!=null\">limit #{query.simplePage.start},#{query.simplePage.end}</if>");
+            bw.newLine();
+            bw.write("\t</select>");
+            bw.newLine();
+
+            bw.newLine();
+            bw.write("\t<!--查询数量-->");
+            bw.newLine();
+            bw.write("\t<select id=\"selectCount\" resultType=\"java.lang.Long\">");
+            bw.newLine();
+            bw.write("\t\tSELECT count(1) FROM "+tableInfo.getTableName()+" <include refid=\""+query_condition+"\"/>");
+            bw.newLine();
+            bw.write("\t</select>");
+            bw.newLine();
+
             bw.write("</mapper>");
             bw.newLine();
             bw.flush();

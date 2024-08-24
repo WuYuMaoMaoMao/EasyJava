@@ -6,7 +6,7 @@ import java.util.Date;
  *  @author:wuyumaomao
  *  @Date:2024/08/24
  */
-public class InfoQuery{
+public class InfoQuery  extends BaseQuery {
 	/**
 	 * 用户id查询对象
 	 */

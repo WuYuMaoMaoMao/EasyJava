@@ -24,6 +24,19 @@ public class BuildBase {
         headerInfoList.add("package"+" "+Contans.PACKAGE_MAPPER);
         build(headerInfoList,"BaseMapper", Contans.PATH_MAPPER);
 
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_ENUM);
+        build(headerInfoList,"PageSize", Contans.PATH_ENUM);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_QUERY);
+        headerInfoList.add("import "+Contans.PACKAGE_ENUM+".PageSize");
+        build(headerInfoList,"SimplePage", Contans.PATH_QUERY);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_QUERY);
+        build(headerInfoList,"BaseQuery", Contans.PATH_QUERY);
+
     }
     public static void build(List<String> headerInfoList, String fileName, String outPutPath){
         File folder=new File(outPutPath);

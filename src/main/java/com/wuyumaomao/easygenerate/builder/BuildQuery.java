@@ -45,7 +45,7 @@ public class BuildQuery {
 
             bw.newLine();
             BuildComment.createClassComment(bw,tableInfo.getComment());
-            bw.write("public class "+className+"{");
+            bw.write("public class "+className+"  extends BaseQuery {");
             bw.newLine();
             List<FieldInfo> extendList=new ArrayList<>();
             for(FieldInfo fieldInfo:tableInfo.getFieldList()){

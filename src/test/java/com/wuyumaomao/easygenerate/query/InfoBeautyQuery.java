@@ -5,7 +5,7 @@ package com.wuyumaomao.easygenerate.query;
  *  @author:wuyumaomao
  *  @Date:2024/08/24
  */
-public class InfoBeautyQuery{
+public class InfoBeautyQuery  extends BaseQuery {
 	/**
 	 * 查询对象
 	 */
