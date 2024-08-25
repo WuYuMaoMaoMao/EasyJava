@@ -11,7 +11,7 @@ public class Contans {
     public static  String PACKAGE_BASE;
    public static  String PATH_PO;
    private static String PATH_JAVA="java";
-   private static String PATH_resource="resource";
+   private static String PATH_resource="resources";
    public static  String PACKAGE_PO;
    public static String AUTHOR_COMMENT;
    public static  String ignore_bean_tojson_field;

@@ -17,4 +17,5 @@ public class TableInfo {
    private Boolean haveDateTime;
    private List<FieldInfo> fieldExtendList;
    private Boolean haveBigDecimal;
+//   private Boolean haveAutoIncrement;
 }
