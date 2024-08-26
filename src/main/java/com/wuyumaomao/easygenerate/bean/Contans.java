@@ -35,6 +35,13 @@ public class Contans {
    public static final String PACKAGE_MAPPER;
    public static final String PATH_MAPPER;
    public static final String PATH_MAPPERS_XML;
+
+   public static String PACKAGE_SERVICE;
+   public static String PATH_SERVICE;
+    public static String PACKAGE_SERVICE_IMPL;
+    public static String PATH_SERVICE_IMPL;
+    public static String PACKAGE_VO;
+    public static String PATH_VO;
     static {
         ignore_table_prefix= Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         suffix_bean_query=PropertiesUtils.getString("suffix.bean.query");
@@ -67,6 +74,12 @@ public class Contans {
        PACKAGE_MAPPER=PACKAGE_BASE+"."+PropertiesUtils.getString("package.mapper");
        PATH_MAPPER=PATH_BASE+"/"+PropertiesUtils.getString("package.mapper").replace(".","/");
        PATH_MAPPERS_XML=PropertiesUtils.getString("path.base")+PATH_resource+"/"+PACKAGE_MAPPER.replace(".","/");
+       PACKAGE_SERVICE=PACKAGE_BASE+"."+PropertiesUtils.getString("package.service");
+       PACKAGE_SERVICE_IMPL=PACKAGE_BASE+"."+PropertiesUtils.getString("package.service.impl");
+       PATH_SERVICE=PATH_BASE+"/"+PropertiesUtils.getString("package.service").replace(".","/");
+       PATH_SERVICE_IMPL=PATH_BASE+"/"+PropertiesUtils.getString("package.service.impl").replace(".","/");
+       PACKAGE_VO=PACKAGE_BASE+"."+PropertiesUtils.getString("package.vo");
+       PATH_VO=PATH_BASE+"/"+PropertiesUtils.getString("package.vo").replace(".","/");
     }
     public  final static String[] SQL_DATE_TIME_TYPES=new String[]{"datetime","timestamp"};
     public  final static String[] SQL_DATE_TYPES=new String[]{"date"};
@@ -75,6 +88,6 @@ public class Contans {
     public final static  String[] SQL_INTEGER_TYPES=new String[]{"int","tinyint"};
     public final static String[] SQL_LONG_TYPES=new String[]{"bigint"};
     public static void main(String[] args){
-        System.out.println( PATH_MAPPERS_XML);
+        System.out.println( PATH_VO);
     }
 }
