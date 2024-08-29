@@ -41,6 +41,32 @@ public class BuildBase {
         headerInfoList.add("package"+" "+Contans.PACKAGE_VO);
         build(headerInfoList,"PaginationResultVO", Contans.PATH_VO);
 
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_ENUM);
+        build(headerInfoList,"ResponseCodeEnum", Contans.PATH_ENUM);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_EXCEPTION);
+        headerInfoList.add("import "+Contans.PACKAGE_ENUM+".ResponseCodeEnum");
+        build(headerInfoList,"BusinessException", Contans.PATH_EXCEPTION);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_CONTROLLER);
+        headerInfoList.add("import "+Contans.PACKAGE_ENUM+".ResponseCodeEnum");
+        headerInfoList.add("import "+Contans.PACKAGE_VO+".ResponseVO;");
+        build(headerInfoList,"ABaseController", Contans.PATH_CONTROLLER);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_VO);
+        build(headerInfoList,"ResponseVO", Contans.PATH_VO);
+
+        headerInfoList.clear();
+        headerInfoList.add("package"+" "+Contans.PACKAGE_CONTROLLER);
+        headerInfoList.add("import "+Contans.PACKAGE_ENUM+".ResponseCodeEnum");
+        headerInfoList.add("import "+Contans.PACKAGE_VO+".ResponseVO;");
+        headerInfoList.add("import "+Contans.PACKAGE_EXCEPTION+".BusinessException;");
+        build(headerInfoList,"AGlobalExceptionHandlerController", Contans.PATH_CONTROLLER);
+
     }
     public static void build(List<String> headerInfoList, String fileName, String outPutPath){
         File folder=new File(outPutPath);

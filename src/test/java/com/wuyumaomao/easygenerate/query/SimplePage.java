@@ -1,6 +1,6 @@
 package com.wuyumaomao.easygenerate.query;
 
-import com.easyjava.enums.PageSize;
+import com.wuyumaomao.easygenerate.enums.PageSize;
 
 public class SimplePage{
     private int pageNo;

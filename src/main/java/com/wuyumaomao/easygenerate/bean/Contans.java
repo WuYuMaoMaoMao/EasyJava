@@ -42,6 +42,10 @@ public class Contans {
     public static String PATH_SERVICE_IMPL;
     public static String PACKAGE_VO;
     public static String PATH_VO;
+    public static String PACKAGE_EXCEPTION;
+    public static String PATH_EXCEPTION;
+    public static String PACKAGE_CONTROLLER;
+    public static String PATH_CONTROLLER;
     static {
         ignore_table_prefix= Boolean.valueOf(PropertiesUtils.getString("ignore.table.prefix"));
         suffix_bean_query=PropertiesUtils.getString("suffix.bean.query");
@@ -80,6 +84,10 @@ public class Contans {
        PATH_SERVICE_IMPL=PATH_BASE+"/"+PropertiesUtils.getString("package.service.impl").replace(".","/");
        PACKAGE_VO=PACKAGE_BASE+"."+PropertiesUtils.getString("package.vo");
        PATH_VO=PATH_BASE+"/"+PropertiesUtils.getString("package.vo").replace(".","/");
+       PACKAGE_EXCEPTION=PACKAGE_BASE+"."+PropertiesUtils.getString("package.exception");
+       PATH_EXCEPTION=PATH_BASE+"/"+PropertiesUtils.getString("package.exception").replace(".","/");
+       PACKAGE_CONTROLLER=PACKAGE_BASE+"."+PropertiesUtils.getString("package.controller");
+       PATH_CONTROLLER=PATH_BASE+"/"+PropertiesUtils.getString("package.controller").replace(".","/");
     }
     public  final static String[] SQL_DATE_TIME_TYPES=new String[]{"datetime","timestamp"};
     public  final static String[] SQL_DATE_TYPES=new String[]{"date"};
@@ -88,6 +96,6 @@ public class Contans {
     public final static  String[] SQL_INTEGER_TYPES=new String[]{"int","tinyint"};
     public final static String[] SQL_LONG_TYPES=new String[]{"bigint"};
     public static void main(String[] args){
-        System.out.println( PATH_VO);
+        System.out.println( PATH_EXCEPTION);
     }
 }

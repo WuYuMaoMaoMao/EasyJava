@@ -20,6 +20,7 @@ public class EasyGenerateApplication {
             BuildMapperXML.execute(tableInfo);
             BuildService.execute(tableInfo);
             BuildServiceImpl.execute(tableInfo);
+            BuildController.execute(tableInfo);
         }
     }
 
